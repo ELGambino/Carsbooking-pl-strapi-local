@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_rentals_additional_services",
+  "info": {
+    "displayName": "AdditionalServices",
+    "icon": "plus"
+  },
+  "options": {},
+  "attributes": {
+    "Name": {
+      "type": "string"
+    },
+    "Price": {
+      "type": "integer"
+    }
+  }
+}

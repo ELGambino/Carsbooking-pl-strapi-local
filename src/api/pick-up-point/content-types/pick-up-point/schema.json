@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pick_up_points",
+  "info": {
+    "singularName": "pick-up-point",
+    "pluralName": "pick-up-points",
+    "displayName": "PickUpPoints",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "City": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string",
+      "required": true
+    },
+    "Address": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "text",
+      "required": true
+    },
+    "Cars": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::car.car",
+      "mappedBy": "PickUpPoints"
+    },
+    "Rentals": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::rental.rental",
+      "mappedBy": "PickUpPoints"
+    },
+    "PostalCode": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string",
+      "required": true
+    }
+  }
+}

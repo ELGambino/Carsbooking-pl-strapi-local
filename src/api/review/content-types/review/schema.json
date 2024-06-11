@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reviews",
+  "info": {
+    "singularName": "review",
+    "pluralName": "reviews",
+    "displayName": "Reviews",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Name": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "blocks"
+    },
+    "Review": {
+      "type": "integer",
+      "required": true,
+      "max": 5,
+      "default": 5
+    },
+    "Cars": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::car.car",
+      "inversedBy": "Reviews"
+    },
+    "Rentals": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::rental.rental",
+      "inversedBy": "Reviews"
+    },
+    "Blogs": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::blog.blog",
+      "inversedBy": "Reviews"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "transactions",
+  "info": {
+    "singularName": "transaction",
+    "pluralName": "transactions",
+    "displayName": "Transaction",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Price": {
+      "type": "integer"
+    },
+    "Cars": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::car.car",
+      "inversedBy": "Transactions"
+    },
+    "pickupAddress": {
+      "type": "string"
+    },
+    "returnAddress": {
+      "type": "string"
+    }
+  }
+}
