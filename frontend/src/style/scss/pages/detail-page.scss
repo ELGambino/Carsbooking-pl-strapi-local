@@ -1,6 +1,10 @@
 /*-----------------
     23. Product Details
 -----------------------*/
+.address-info {
+    padding-bottom: 20px;
+}
+
 .rental-item {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

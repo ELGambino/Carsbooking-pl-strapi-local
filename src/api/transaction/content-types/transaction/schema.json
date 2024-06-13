@@ -15,17 +15,17 @@
     "Price": {
       "type": "integer"
     },
-    "Cars": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::car.car",
-      "inversedBy": "Transactions"
-    },
     "pickupAddress": {
       "type": "string"
     },
     "returnAddress": {
       "type": "string"
+    },
+    "Cars": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::car.car",
+      "inversedBy": "Transactions"
     }
   }
 }

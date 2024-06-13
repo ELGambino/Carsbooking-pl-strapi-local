@@ -1,6 +1,33 @@
 /*-----------------
     11. Home
 -----------------------*/
+.timepicker {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.group-img .ant-picker .ant-picker-input {
+    display: flex !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+}
+
+.group-img .ant-picker .ant-picker-input input {
+    display: flex;
+    height: 45px;
+    padding: 0 !important;
+    margin-left: 15px;
+}
+
+.group-img div.ant-picker {
+    display: flex;
+}
+
+:where(.css-dev-only-do-not-override-3rel02).ant-select .ant-select-selection-placeholder {
+    color: rgba(0, 0, 0, 0.6);
+}
 .services-height {
     min-height: 175px;
 }
@@ -11,7 +38,7 @@
 
 .section {
     position: $__relative;
-    @include margin-padding(null, 80px 0);
+    @include margin-padding(null, 80px 0 56px);
     @include respond-below(custom991) {
         @include margin-padding(null, 50px 0);
     } 
@@ -248,7 +275,7 @@
         }
     }    
     p {
-        max-width: 439px;
+        max-width: 500px;
         margin: auto;
         font-size: $__font__size__16;
         @include respond-below(custom991){
@@ -1131,10 +1158,7 @@
 // What People say about us
 
 .about-testimonial {
-    background-image: url(../../../../public/assets/img/bg/about-testimonial.jpg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover; 
+    background: $__light__vampire;
     @include respond-below(custom991) {
         background: $__goose-gray;
     }    

@@ -77,7 +77,6 @@ const BlogList = () => {
   const { loading:FeaturedLoading, error:FeaturedError, data:FeaturedData } = useQuery(FEATURED)
   if (loading || FeaturedLoading) return 'Loading...';
   if (error || FeaturedError) return `Error! ${error.message}`;
-  
   return (
       <div className="main-wrapper">
         <Breadcrumbs title="Blog" subtitle="Blogs" />

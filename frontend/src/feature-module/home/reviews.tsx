@@ -55,10 +55,9 @@ const ReviewsHome = () => {
         <div className="container">
         {/* Heading title*/}
         <div className="section-heading" data-aos="fade-down">
-            <h2 className="title text-white">Opinie Klientów!</h2>
-            <p className="description text-white">
-            Zadowolenie klientów jest dla nas najwyższym priorytetem. 
-            Przekonaj się, co nasi klienci mają do powiedzenia o swoich doświadczeniach z naszą firmą!
+            <h2 className="title">Opinie Klientów!</h2>
+            <p className="description">
+            Zadowolenie klientów jest naszym najwyższym priorytetem. Przekonaj się, co nasi klienci mówią o naszej firmie!
             </p>
         </div>
         {/* /Heading title */}

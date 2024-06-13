@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
-import { Calendar } from "primereact/calendar";
 import CountUp from "react-countup";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import type { Dayjs } from "dayjs";
-import dayjs from "dayjs";
-import { TimePicker } from "antd";
 import { all_routes } from "../router/all_routes";
 import RentalDeals from "./rental_deals";
 import ReviewsHome from '../home/reviews';
+import {SelectPickUpPoints, SelectTurnPoint, DataPickerTurnPoint, DataPickerPointUp} from "../home/pickUpPoints";
 
 const Home = () => {
   const routes = all_routes;
@@ -55,7 +52,6 @@ const Home = () => {
     AOS.init({ duration: 1200, once: true });
   }, []);
 
-
   return (
     <>
       {/* Banner */}
@@ -92,53 +88,21 @@ const Home = () => {
       <div className="section-search">
         <div className="container">
           <div className="search-box-banner">
-            <form >
+            <form>
               <ul className="align-items-center">
                 <li className="column-group-main">
                   <div className="input-block">
                     <label>Punkt odbioru</label>
                     <div className="group-img">
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Wprowadź punkt odbioru... "
-                      />
-                      <span>
-                        <i className="feather icon-map-pin" />
-                      </span>
+                      <SelectPickUpPoints></SelectPickUpPoints>
                     </div>
                   </div>
                 </li>
                 <li className="column-group-main">
                   <div className="input-block">
                     <label>Data odbioru</label>
-                  </div>
-                  <div className="input-block-wrapp">
-                    <div className="input-block date-widget">
-                      <div className="group-img">
-                        <Calendar
-                          value={date1}
-                          onChange={(e) => setDate1(e.value)}
-                          placeholder="04/04/2024"
-                        />
-                        {/* <input type="text" className="form-control datetimepicker" placeholder="04/11/2023" /> */}
-                        <span>
-                          <i className="feather icon-calendar"></i>
-                        </span>
-                      </div>
-                    </div>
-                    <div className="input-block time-widge">
-                      <div className="group-img">
-                        <TimePicker
-                          placeholder="11:00 AM"
-                          className="form-control timepicker"
-                          onChange={onChange}
-                          defaultValue={dayjs("00:00:00", "HH:mm:ss")}
-                        />
-                        <span>
-                          <i className="feather icon-clock"></i>
-                        </span>
-                      </div>
+                    <div className="group-img timepicker">
+                      <DataPickerPointUp></DataPickerPointUp>
                     </div>
                   </div>
                 </li>
@@ -146,14 +110,7 @@ const Home = () => {
                   <div className="input-block">
                     <label>Punkt zwrotu</label>
                     <div className="group-img">
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Wprowadź punkt zwrotu... "
-                      />
-                      <span>
-                        <i className="feather icon-map-pin" />
-                      </span>
+                      <SelectTurnPoint></SelectTurnPoint>
                     </div>
                   </div>
                 </li>
@@ -161,30 +118,10 @@ const Home = () => {
                   <div className="input-block">
                     <label>Data zwrotu</label>
                   </div>
-                  <div className="input-block-wrapp">
-                    <div className="input-block date-widge">
-                      <div className="group-img">
-                        <Calendar
-                          value={date2}
-                          onChange={(e) => setDate2(e.value)}
-                          placeholder="04/11/2023"
-                        />
-                        <span>
-                          <i className="feather icon-calendar" />
-                        </span>
-                      </div>
-                    </div>
-                    <div className="input-block time-widge">
-                      <div className="group-img">
-                        <TimePicker
-                          placeholder="11:00 AM"
-                          className="form-control timepicker"
-                          onChange={onChange}
-                          defaultValue={dayjs("00:00:00", "HH:mm:ss")}
-                        />
-                        <span>
-                          <i className="feather icon-clock"></i>
-                        </span>
+                  <div className="column-group-main">
+                    <div className="input-block">
+                      <div className="group-img timepicker">
+                        <DataPickerTurnPoint></DataPickerTurnPoint>
                       </div>
                     </div>
                   </div>
@@ -192,11 +129,14 @@ const Home = () => {
                 <li className="column-group-last">
                   <div className="input-block">
                     <div className="search-btn">
+                      <Link
+                      to={routes.listinggrid}>
                       <button className="btn search-button" type="submit">
                         {" "}
                         <i className="fa fa-search" aria-hidden="true" />
                         Szukaj
                       </button>
+                      </Link>
                     </div>
                   </div>
                 </li>
@@ -217,7 +157,7 @@ const Home = () => {
         <div className="container">
           {/* Heading title*/}
           <div className="section-heading" data-aos="fade-down">
-            <h2>Zaplanuj swoją podróż</h2>
+            <h2>Zaplanuj swoją podróż </h2>
             <p>
             Bez względu na cel podróży, mamy idealny samochód dla Ciebie. Oferujemy wygodne i niezawodne pojazdy.
             </p>
@@ -281,104 +221,6 @@ const Home = () => {
       {/* Rental deals */}
         <RentalDeals></RentalDeals>
       {/* /Rental deals */}
-      {/* Popular Cartypes */}
-      <section className="section popular-car-type">
-        <div className="container">
-          {/* Heading title*/}
-          <div className="section-heading" data-aos="fade-down">
-            <h2>Wybierz swój styl</h2>
-            <p>
-            Odkryj różnorodność świata samochodów! Bez względu na Twoje potrzeby, istnieje idealny pojazd który zapewni Ci wszechstronność.
-            </p>
-          </div>
-          {/* /Heading title */}
-          <div className="row">
-            <div className="popular-slider-group">
-              <Slider {...settings}>
-                <div className="listing-owl-item">
-                  <div className="listing-owl-group">
-                    <div className="listing-owl-img">
-                      <ImageWithBasePath
-                        src="assets/img/cars/mp-vehicle-01.png"
-                        className="img-fluid"
-                        alt="Popular Cartypes"
-                      />
-                    </div>
-                    <h6>Crossover</h6>
-                    <p>35 samochodów</p>
-                  </div>
-                </div>
-                <div className="listing-owl-item">
-                  <div className="listing-owl-group">
-                    <div className="listing-owl-img">
-                      <ImageWithBasePath
-                        src="assets/img/cars/mp-vehicle-02.png"
-                        className="img-fluid"
-                        alt="Popular Cartypes"
-                      />
-                    </div>
-                    <h6>Sports Coupe</h6>
-                    <p>45 samochodów</p>
-                  </div>
-                </div>
-                <div className="listing-owl-item">
-                  <div className="listing-owl-group">
-                    <div className="listing-owl-img">
-                      <ImageWithBasePath
-                        src="assets/img/cars/mp-vehicle-03.png"
-                        className="img-fluid"
-                        alt="Popular Cartypes"
-                      />
-                    </div>
-                    <h6>Sedan</h6>
-                    <p>15 samochodów</p>
-                  </div>
-                </div>
-                <div className="listing-owl-item">
-                  <div className="listing-owl-group">
-                    <div className="listing-owl-img">
-                      <ImageWithBasePath
-                        src="assets/img/cars/mp-vehicle-04.png"
-                        className="img-fluid"
-                        alt="Popular Cartypes"
-                      />
-                    </div>
-                    <h6>Pickup</h6>
-                    <p>17 samochodów</p>
-                  </div>
-                </div>
-                <div className="listing-owl-item">
-                  <div className="listing-owl-group">
-                    <div className="listing-owl-img">
-                      <ImageWithBasePath
-                        src="assets/img/cars/mp-vehicle-05.png"
-                        className="img-fluid"
-                        alt="Popular Cartypes"
-                      />
-                    </div>
-                    <h6>Family MPV</h6>
-                    <p>24 samochodów</p>
-                  </div>
-                </div>
-              </Slider>
-            </div>
-          </div>
-          {/* View More */}
-          <div className="view-all text-center" data-aos="fade-down">
-            <Link
-              to={routes.listinggrid}
-              className="btn btn-view d-inline-flex align-items-center"
-            >
-              Sprawdź wszystkie modele{" "}
-              <span>
-                <i className="feather icon-arrow-right ms-2" />
-              </span>
-            </Link>
-          </div>
-          {/* View More */}
-        </div>
-      </section>
-      {/* /Popular Cartypes */}
       {/* Facts By The Numbers */}
       <section className="section facts-number">
         <div className="facts-right">
@@ -393,9 +235,7 @@ const Home = () => {
           <div className="section-heading" data-aos="fade-down">
             <h2 className="title text-white">Rzeczywistość w liczbach</h2>
             <p className="description text-white">
-            Nie ma dwóch identycznych podróży, dlatego oferujemy Ci ponad 100 modeli samochodów 
-            do wyboru! Bez względu na Twój cel podróży czy preferencje, mamy pojazd, 
-            który spełni Twoje oczekiwania
+            Nie ma dwóch identycznych podróży, dlatego oferujemy ponad 100 modeli samochodów do wyboru! Bez względu na cel podróży.
             </p>
           </div>
           {/* /Heading title */}

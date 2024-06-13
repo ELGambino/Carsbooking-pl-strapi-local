@@ -42,7 +42,7 @@
                 height: 70px;
                 @include margin-padding(0 auto 15px, null);
                 line-height: 50px;
-                background: $__warningcolor;
+                background: #FF4C30;
                 border-radius: 50%;
                     @include respond-below(custom992) {
                         width: 35px;

@@ -945,6 +945,25 @@ export interface ApiCarCar extends Schema.CollectionType {
         };
       }> &
       Attribute.DefaultTo<false>;
+    Brands: Attribute.Enumeration<
+      [
+        'Bmw',
+        'Mazda',
+        'Ford',
+        'Tesla',
+        'Audi',
+        'Kia',
+        'Honda',
+        'Toyota',
+        'Mercedes Benz',
+        'Maserati'
+      ]
+    > &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     Images: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true> &
       Attribute.SetPluginOptions<{
         i18n: {
@@ -982,25 +1001,6 @@ export interface ApiCarCar extends Schema.CollectionType {
       'manyToMany',
       'api::price.price'
     >;
-    Brands: Attribute.Enumeration<
-      [
-        'Bmw',
-        'Mazda',
-        'Ford',
-        'Tesla',
-        'Audi',
-        'Kia',
-        'Honda',
-        'Toyota',
-        'Mercedes Benz',
-        'Maserati'
-      ]
-    > &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1014,6 +1014,38 @@ export interface ApiCarCar extends Schema.CollectionType {
       'api::car.car'
     >;
     locale: Attribute.String;
+  };
+}
+
+export interface ApiMessageMessage extends Schema.CollectionType {
+  collectionName: 'messages';
+  info: {
+    singularName: 'message';
+    pluralName: 'messages';
+    displayName: 'Messages';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Title: Attribute.String;
+    Content: Attribute.Blocks;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::message.message',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::message.message',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
   };
 }
 
@@ -1307,13 +1339,13 @@ export interface ApiTransactionTransaction extends Schema.CollectionType {
   };
   attributes: {
     Price: Attribute.Integer;
+    pickupAddress: Attribute.String;
+    returnAddress: Attribute.String;
     Cars: Attribute.Relation<
       'api::transaction.transaction',
       'manyToMany',
       'api::car.car'
     >;
-    pickupAddress: Attribute.String;
-    returnAddress: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1352,6 +1384,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::blog.blog': ApiBlogBlog;
       'api::car.car': ApiCarCar;
+      'api::message.message': ApiMessageMessage;
       'api::pick-up-point.pick-up-point': ApiPickUpPointPickUpPoint;
       'api::price.price': ApiPricePrice;
       'api::rental.rental': ApiRentalRental;

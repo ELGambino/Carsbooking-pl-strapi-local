@@ -3,7 +3,7 @@
 -----------------------*/
 
 .faq-section {
-	background: $__alice__blue;
+	background: #ffffff !important;
     .faq-card {
         @include margin-padding(0 0 20px, 20px 40px 20px 20px);
         border: 1px solid $__blue__light;

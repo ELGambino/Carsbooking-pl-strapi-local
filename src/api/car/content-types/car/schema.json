@@ -164,6 +164,26 @@
       "default": false,
       "required": true
     },
+    "Brands": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "enumeration",
+      "enum": [
+        "Bmw",
+        "Mazda",
+        "Ford",
+        "Tesla",
+        "Audi",
+        "Kia",
+        "Honda",
+        "Toyota",
+        "Mercedes Benz",
+        "Maserati"
+      ]
+    },
     "Images": {
       "type": "media",
       "multiple": true,
@@ -220,26 +240,6 @@
       "relation": "manyToMany",
       "target": "api::price.price",
       "mappedBy": "Cars"
-    },
-    "Brands": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "enumeration",
-      "enum": [
-        "Bmw",
-        "Mazda",
-        "Ford",
-        "Tesla",
-        "Audi",
-        "Kia",
-        "Honda",
-        "Toyota",
-        "Mercedes Benz",
-        "Maserati"
-      ]
     }
   }
 }

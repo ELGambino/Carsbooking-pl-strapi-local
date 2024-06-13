@@ -262,7 +262,7 @@
             display: $__inline__flex;
             align-items: center;
             @include margin-padding(null, 12px 18px);
-            font-weight: $__bold;
+            font-weight: 400;
             font-size: $__font__size__16;
             &:active {
                 background: $__primarycolor;
@@ -920,4 +920,8 @@
             margin-bottom: 7px;
         }
     }
+}
+
+:where(.css-dev-only-do-not-override-3rel02).ant-picker .ant-picker-clear {
+    left: 94%;
 }

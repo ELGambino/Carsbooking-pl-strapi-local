@@ -1,245 +1,156 @@
-import React, { useEffect } from "react";
-import Breadcrumbs from "../common/Breadcrumbs";
+import React, { useContext, useEffect, useState } from "react";
+import { gql, useQuery, useLazyQuery } from '@apollo/client';
 import { Link } from "react-router-dom";
-import Select from "react-select";
 import { all_routes } from "../router/all_routes";
-import ListingSidebar from "./listingsidebar";
-// import { Listinggriddata } from '../../core/data/json/listinggrid_data';
-import { useSelector } from "react-redux";
-
+import Breadcrumbs from "../common/Breadcrumbs";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
+import ImageWithBasePathApi from "../../core/data/img/ImageWithBasePathApi";
+import { useParams } from 'react-router-dom';
 import Aos from "aos";
-import { CarListing } from "../../core/data/interface/interface";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
+import { useForm } from "react-hook-form";
+import ReactDOM from "react-dom";
 
-const Listinglist = () => {
-  const data = useSelector((state: CarListing) => state.listing_list);
+const CARS = gql`
+query($breed: String!){
+  cars(filters: { Brands: { containsi: $breed }}) {
+    data {
+      id
+      attributes {
+        Name
+        Type
+        EngineType
+        Gearbox
+        Brands
+        NumberOfSeats
+        EnginePower
+        Description
+        NumberOfDoors
+        YearOfProduction
+        EngineCapacity
+        AirConditioning
+        Featured
+        Image {
+          data {
+            id
+            attributes {
+              alternativeText
+              formats
+              url
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`;
 
+const ListingGrid = () => {
+  const [breed, setbreed] =  useState('');
   const routes = all_routes;
-  const options = [
-    { value: 5, label: "5" },
-    { value: 10, label: "10" },
-    { value: 15, label: "15" },
-    { value: 20, label: "20" },
-  ];
-  const optionsTwo = [
-    { value: 1, label: "Low to High" },
-    { value: 2, label: "High to Low" },
-  ];
+  const { register, handleSubmit, errors } = useForm();
+  const { loading, error, data, refetch } = useQuery(CARS, {
+    variables: { breed }
+  })
+  const formSubmit = () => {
+    e.preventDefault()
+    refetch();
+  }
 
-  const optionsThree = [
-    { value: "popular", label: "Popular" },
-    { value: "toyota", label: "Toyota Camry SE 350" },
-    { value: "audi", label: "Audi A3 2019 new" },
-    { value: "ferrari", label: "Ferrari 458 MM Speciale" },
-    { value: "chevrolet", label: "Chevrolet Camaro" },
-    { value: "acura", label: "Acura Sport Version" },
-  ];
-  useEffect(() => {
-    Aos.init({ duration: 1200, once: true });
-  }, []);
+  if (loading) return 'Loading...';
+  if (error) return `Error! ${error.message}`;
+  
   return (
     <div className="main-wrapper">
-      <Breadcrumbs title="Car Listings" subtitle="Listings" />
-      <div className="sortby-sec">
-        <div className="container">
-          <div className="sorting-div">
-            <div className="row d-flex align-items-center">
-              <div className="col-xl-4 col-lg-3 col-sm-12 col-12">
-                <div className="count-search">
-                  <p>
-                    Showing <span>1-8</span> of 10 Results
-                  </p>
-                </div>
-              </div>
-              <div className="col-xl-8 col-lg-9 col-sm-12 col-12">
-                <div className="product-filter-group">
-                  <div className="sortbyset">
-                    <span className="sortbytitle">Show : </span>
-                    <div className="sorting-select select-one">
-                      <Select
-                        className="select w-100"
-                        options={options}
-                        placeholder="5"
-                        isSearchable={false}
-                      />
-                    </div>
-                    <div className="sorting-select select-two">
-                      <Select
-                        className="select w-100"
-                        options={optionsTwo}
-                        placeholder="Low to High"
-                        isSearchable={false}
-                      />
-                    </div>
-                    <div className="sorting-select select-three">
-                      <Select
-                        className="select"
-                        options={optionsThree}
-                        placeholder="Popular"
-                        aria-labelledby="carDropdownLabel"
-                        isSearchable={false}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid-listview">
-                    <ul>
-                      <li>
-                        <Link to={routes.listinggrid}>
-                          <i className="feather icon-grid"></i>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to={routes.listinglist} className="active">
-                          <i className="feather icon-list"> </i>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <Breadcrumbs title="Wypożyczalnia" subtitle="Lista" />
 
       <section className="section car-listing">
         <div className="container">
           <div className="row">
-            <div className="col-lg-3 col-12 theiaStickySidebar">
-              <div className="stickysidebar">
-                <ListingSidebar />
-              </div>
-            </div>
-            <div className="col-lg-9">
-              <div className="row">
-                {data.map((car: CarListing, index: number) => (
-                  <div className="listview-car" key={index}>
-                    <div className="card">
-                      <div className="blog-widget d-flex">
-                        <div className="blog-img">
-                          <Link to="/listing-details">
-                            <ImageWithBasePath
-                              src={`assets/img/${car.image}`}
-                              className="img-fluid"
-                              alt="blog-img"
-                            />
-                          </Link>
-                        </div>
-                        <div className="bloglist-content w-100">
-                          <div className="card-body">
-                            <div className="blog-list-head d-flex">
-                              <div className="blog-list-title">
-                                <h3>
-                                  <Link to="/listing-details">{car.title}</Link>
-                                </h3>
-                                <h6>
-                                  Category : <span>{car.category}</span>
-                                </h6>
-                              </div>
-                              <div className="blog-list-rate">
-                                <div className="list-rating">
-                                  <i className="fas fa-star filled"></i>
-                                  <i className="fas fa-star filled"></i>
-                                  <i className="fas fa-star filled"></i>
-                                  <i className="fas fa-star filled"></i>
-                                  <i className="fas fa-star filled"></i>
-                                  <span>({car.rating})</span>
-                                </div>
-                                <h6>
-                                  {car.price} <span>/ Day</span>
-                                </h6>
-                              </div>
-                            </div>
-                            <div className="listing-details-group">
-                              <ul>
-                                <li>
-                                  <span>
-                                    <ImageWithBasePath
-                                      src="assets/img/icons/car-parts-05.svg"
-                                      alt="Auto"
-                                    />
-                                  </span>
-                                  <p>Auto</p>
-                                </li>
-                                <li>
-                                  <span>
-                                    <ImageWithBasePath
-                                      src="assets/img/icons/car-parts-02.svg"
-                                      alt="10 KM"
-                                    />
-                                  </span>
-                                  <p>10 KM</p>
-                                </li>
-                                <li>
-                                  <span>
-                                    <ImageWithBasePath
-                                      src="assets/img/icons/car-parts-03.svg"
-                                      alt="Petrol"
-                                    />
-                                  </span>
-                                  <p>Petrol</p>
-                                </li>
-                                <li>
-                                  <span>
-                                    <ImageWithBasePath
-                                      src="assets/img/icons/car-parts-04.svg"
-                                      alt="Power"
-                                    />
-                                  </span>
-                                  <p>Power</p>
-                                </li>
-                                <li>
-                                  <span>
-                                    <ImageWithBasePath
-                                      src="assets/img/icons/car-parts-05.svg"
-                                      alt="2018"
-                                    />
-                                  </span>
-                                  <p>2018</p>
-                                </li>
-                                <li>
-                                  <span>
-                                    <ImageWithBasePath
-                                      src="assets/img/icons/car-parts-06.svg"
-                                      alt="Persons"
-                                    />
-                                  </span>
-                                  <p>5 Persons</p>
-                                </li>
-                              </ul>
-                            </div>
-
-                            <div className="blog-list-head list-head-bottom d-flex">
-                              <div className="blog-list-title">
-                                <div className="title-bottom">
-                                  <div className="car-list-icon">
-                                    <ImageWithBasePath
-                                      src={`assets/img/cars/${car.location.icon}`}
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div className="address-info">
-                                    <h5>
-                                      <Link to="#">{car.location.name}</Link>
-                                    </h5>
-                                    <h6>
-                                      <i className="feather icon-map-pin me-2" />
-                                      {car.location.address}
-                                    </h6>
+          <div className="col-lg-3 col-12 theiaStickySidebar">
+              <div className="stickybar">
+                <>
+                <form onSubmit={formSubmit} autoComplete="off" className="sidebar-form">
+                  {/* Customer */}
+                  <div className="product-search">
+                    <div className="form-custom">
+                      <input type="text" className="form-control" id="member_search1" />
+                      <span>
+                        <ImageWithBasePath src="assets/img/icons/search.svg" alt="img" />
+                      </span>
+                    </div>
+                  </div>
+                  <div className="accordion" id="accordionMain1">
+                    <div className="card-header-new" id="headingOne">
+                      <h6 className="filter-title">
+                        <Link
+                          to="#"
+                          className="w-100"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseOne"
+                          aria-expanded="true"
+                          aria-controls="collapseOne"
+                        >
+                          Marka samochodu
+                          <span className="float-end">
+                            <i className="fa-solid fa-chevron-down"></i>
+                          </span>
+                        </Link>
+                      </h6>
+                    </div>
+                    <div
+                      id="collapseOne"
+                      className="collapse show"
+                      aria-labelledby="headingOne"
+                      data-bs-parent="#accordionExample1"
+                    >
+                      <div className="card-body-chat">
+                        <div className="row">
+                          <div className="col-md-12">
+                            <div id="checkBoxes1">
+                              <div className="selectBox-cont">
+                                <label className="custom_check w-100">
+                                  <input
+                                  type="checkbox" 
+                                  value="Tesla"
+                                  {...register('Bmw', {
+                                    onChange: (e) => {setbreed(e.target.value)}
+                                  })}
+                                  />
+                                  <span className="checkmark" /> Tesla
+                                </label>
+                                <label className="custom_check w-100">
+                                  <input type="checkbox" name="username" />
+                                  <span className="checkmark" /> Ford
+                                </label>
+                                <label className="custom_check w-100">
+                                  <input type="checkbox" name="username" />
+                                  <span className="checkmark" /> Mercediz Benz
+                                </label>
+                                <label className="custom_check w-100">
+                                  <input type="checkbox" name="username" />
+                                  <span className="checkmark" /> Audi
+                                </label>
+                                {/* View All */}
+                                <div className="view-content">
+                                  <div className="viewall-One">
+                                    <label className="custom_check w-100">
+                                      <input type="checkbox" name="username" />
+                                      <span className="checkmark" /> Kia
+                                    </label>
+                                    <label className="custom_check w-100">
+                                      <input type="checkbox" name="username" />
+                                      <span className="checkmark" /> Honda
+                                    </label>
+                                    <label className="custom_check w-100">
+                                      <input type="checkbox" name="username" />
+                                      <span className="checkmark" /> Toyota
+                                    </label>
                                   </div>
                                 </div>
-                              </div>
-                              <div className="listing-button">
-                                <Link
-                                  to="/listing-details"
-                                  type="submit"
-                                  className="btn btn-order"
-                                >
-                                  <span>
-                                    <i className="feather icon-calendar me-2" />
-                                  </span>
-                                  Rent Now
-                                </Link>
+                                {/* /View All */}
                               </div>
                             </div>
                           </div>
@@ -247,57 +158,195 @@ const Listinglist = () => {
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-              <div className="blog-pagination">
-                <nav>
-                  <ul className="pagination page-item justify-content-center">
-                    <li className="previtem">
-                      <Link className="page-link" to="#">
-                        <i className="fas fa-regular fa-arrow-left me-2"> </i>{" "}
-                        Prev
-                      </Link>
-                    </li>
-                    <li className="justify-content-center pagination-center">
-                      <div className="page-group">
-                        <ul>
-                          <li className="page-item">
-                            <Link className="page-link" to="#">
-                              1
-                            </Link>
-                          </li>
-                          <li className="page-item">
-                            <Link className="active page-link" to="#">
-                              2{" "}
-                              <span className="visually-hidden">(current)</span>
-                            </Link>
-                          </li>
-                          <li className="page-item">
-                            <Link className="page-link" to="#">
-                              3
-                            </Link>
-                          </li>
-                          <li className="page-item">
-                            <Link className="page-link" to="#">
-                              4
-                            </Link>
-                          </li>
-                          <li className="page-item">
-                            <Link className="page-link" to="#">
-                              5
-                            </Link>
-                          </li>
-                        </ul>
+                  {/* /Customer */}
+                  <div className="accordion" id="accordionMain2">
+                    <div className="card-header-new" id="headingTwo">
+                      <h6 className="filter-title">
+                        <Link
+                          to="#"
+                          className="w-100 collapsed"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseTwo"
+                          aria-expanded="true"
+                          aria-controls="collapseTwo"
+                        >
+                          Typ nadwozia
+                          <span className="float-end">
+                            <i className="fa-solid fa-chevron-up"></i>
+                          </span>
+                        </Link>
+                      </h6>
+                    </div>
+                    <div
+                      id="collapseTwo"
+                      className="collapse show"
+                      aria-labelledby="headingTwo"
+                      data-bs-parent="#accordionExample2"
+                    >
+                      <div className="card-body-chat">
+                        <div id="checkBoxes2">
+                          <div className="selectBox-cont">
+                            <label className="custom_check w-100">
+                              <input type="checkbox" name="username" />
+                              <span className="checkmark" /> Convertible
+                            </label>
+                            <label className="custom_check w-100">
+                              <input type="checkbox" name="username" />
+                              <span className="checkmark" /> Crossover
+                            </label>
+                            <label className="custom_check w-100">
+                              <input type="checkbox" name="username" />
+                              <span className="checkmark" /> Sedan
+                            </label>
+                            <label className="custom_check w-100">
+                              <input type="checkbox" name="username" />
+                              <span className="checkmark" /> Wagon
+                            </label>
+                            {/* View All */}
+                            <div className="view-content">
+                              <div className="viewall-One">
+                                <label className="custom_check w-100">
+                                  <input type="checkbox" name="username" />
+                                  <span className="checkmark" /> Pickup
+                                </label>
+                                <label className="custom_check w-100">
+                                  <input type="checkbox" name="username" />
+                                  <span className="checkmark" /> Wagon
+                                </label>
+                                <label className="custom_check w-100">
+                                  <input type="checkbox" name="username" />
+                                  <span className="checkmark" /> SUV
+                                </label>
+                              </div>
+                            </div>
+                            {/* /View All */}
+                          </div>
+                        </div>
                       </div>
-                    </li>
-                    <li className="nextlink">
-                      <Link className="page-link" to="#">
-                        Next{" "}
-                        <i className="fas fa-regular fa-arrow-right ms-2"></i>
-                      </Link>
-                    </li>
-                  </ul>
-                </nav>
+                    </div>
+                  </div>
+                  <button
+                    type="submit"
+                    className="d-inline-flex align-items-center justify-content-center btn w-100 btn-primary filter-btn"
+                  >
+                    <span>
+                      <i className="feather icon-filter me-2" />
+                    </span>
+                    Filtruj
+                  </button>
+                  <Link to="#" className="reset-filter">
+                    Resetuj filtry
+                  </Link>
+                </form>
+                </>
+              </div>
+            </div>
+            <div className="col-lg-9">
+              <div className="row">
+                {/* col */}
+                {data.cars.data.map(({ id, attributes }) => (
+                  <div
+                    key={id}
+                    className="col-xl-6 col-lg-6 col-md-6 col-12"
+                  >
+                    <div className="listing-item">
+                      <div className="listing-img">
+                        <Link to="{routes.listingdetails}">
+                          <ImageWithBasePathApi
+                            src={attributes.Image.data.attributes.url}
+                            className="img-fluid"
+                            alt={attributes.Image.data.attributes.alternativeText}
+                          />
+                        </Link>
+                      </div>
+                      <div className="listing-content">
+                        <div className="listing-features">
+                          <h3 className="listing-title">
+                            <Link to="">{attributes.Name}</Link>
+                          </h3>
+                          <div className="list-rating">
+                            <i className="fas fa-star filled"></i>
+                            <i className="fas fa-star filled"></i>
+                            <i className="fas fa-star filled"></i>
+                            <i className="fas fa-star filled"></i>
+                            <i className="fas fa-star filled"></i>
+                            <span>(5.0)</span>
+                          </div>
+                        </div>
+                        <div className="listing-details-group">
+                          <ul>
+                            <li>
+                              <span>
+                                <ImageWithBasePath
+                                  src="assets/img/icons/car-parts-05.svg"
+                                  alt=""
+                                />
+                              </span>
+                              <p>{attributes.Type}</p>
+                            </li>
+                            <li>
+                              <span>
+                                <ImageWithBasePath
+                                  src="assets/img/icons/car-parts-02.svg"
+                                  alt=""
+                                />
+                              </span>
+                              <p>{attributes.EnginePower}</p>
+                            </li>
+                            <li>
+                              <span>
+                                <ImageWithBasePath
+                                  src="assets/img/icons/car-parts-03.svg"
+                                  alt=""
+                                />
+                              </span>
+                              <p>{attributes.EngineType}</p>
+                            </li>
+                          </ul>
+                          <ul>
+                            <li>
+                              <span>
+                                <ImageWithBasePath
+                                  src="assets/img/icons/car-parts-04.svg"
+                                  alt=""
+                                />
+                              </span>
+                              <p>{attributes.Gearbox}</p>
+                            </li>
+                            <li>
+                              <span>
+                                <ImageWithBasePath
+                                  src="assets/img/icons/car-parts-05.svg"
+                                  alt=""
+                                />
+                              </span>
+                              <p>{attributes.YearOfProduction}</p>
+                            </li>
+                            <li>
+                              <span>
+                                <ImageWithBasePath
+                                  src="assets/img/icons/car-parts-06.svg"
+                                  alt="Persons"
+                                />
+                              </span>
+                              <p>{attributes.NumberOfSeats}</p>
+                            </li>
+                          </ul>
+                        </div>
+                        <div className="listing-button">
+                          <Link
+                            to={`/listings/car-details/${id}`}
+                            className="btn btn-order"
+                          >
+                            Sprawdź cenę
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {/* /col */}
+                {/* col */}
               </div>
             </div>
           </div>
@@ -307,4 +356,4 @@ const Listinglist = () => {
   );
 };
 
-export default Listinglist;
+export default ListingGrid;

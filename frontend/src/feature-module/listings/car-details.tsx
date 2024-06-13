@@ -7,7 +7,7 @@ import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import ImageWithBasePathApi from "../../core/data/img/ImageWithBasePathApi";
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 import dayjs from 'dayjs';
-import { render } from "react-dom";
+import {SelectPickUpPoints, SelectTurnPoint, DataPickerTurnPoint, DataPickerPointUp} from "../home/pickUpPoints";
 require('dayjs/locale/pl');
 
 export default function CarDetails() {
@@ -212,14 +212,15 @@ export default function CarDetails() {
                                             <h4><span>Cena:</span>{rentalPrices} zł</h4>
                                             <p className="rental-item-price-subtitle">Dodatkowo kaucja zwrotna: 0,00 zł</p>
                                             <p className="rental-item-price-subtitle">Udział własny w szkodzie: 3 000,00 zł.</p>
+                                            <Link
+                                            to={routes.payment}>
                                             <button
                                                 className="btn btn-primary check-available w-100"
                                                 type="button"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#pages_edit"
                                             >
                                                 Zarezerwuj samochód
                                             </button>
+                                            </Link>
                                         </div>
                                     </div>
                                     </>
@@ -361,7 +362,7 @@ export default function CarDetails() {
                     </div>
                 </div>
                 {/* Rentals */}
-                <div className="review-sec extra-service">
+                <div id="rentals-list" className="review-sec extra-service">
                     <div className="review-header">
                     <h4>Dostępny w wypożyczalniach</h4>
                     </div>
@@ -464,36 +465,15 @@ export default function CarDetails() {
                             <div className="input-block">
                                 <label>Punkt odbioru</label>
                                 <div className="group-img">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="45, 4th Avanue  Mark Street USA"
-                                />
+                                    <SelectPickUpPoints></SelectPickUpPoints>
                                 </div>
                             </div>
                             </li>
                             <li className="column-group-main">
-                            <div className="input-block m-0">
+                            <div className="input-block">
                                 <label>Data odbioru</label>
-                            </div>
-                            <div className="input-block-wrapp sidebar-form">
-                                <div className="input-block me-2">
                                 <div className="group-img">
-                                    <input
-                                    type="text"
-                                    className="form-control datetimepicker"
-                                    placeholder="04/11/2023"
-                                    />
-                                </div>
-                                </div>
-                                <div className="input-block">
-                                <div className="group-img">
-                                    <input
-                                    type="text"
-                                    className="form-control timepicker"
-                                    placeholder="11:00 AM"
-                                    />
-                                </div>
+                                    <DataPickerPointUp></DataPickerPointUp>
                                 </div>
                             </div>
                             </li>
@@ -501,54 +481,35 @@ export default function CarDetails() {
                             <div className="input-block">
                                 <label>Punkt zwrotu</label>
                                 <div className="group-img">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="78, 10th street Laplace USA"
-                                />
+                                    <SelectTurnPoint></SelectTurnPoint>
                                 </div>
                             </div>
                             </li>
                             <li className="column-group-main">
-                            <div className="input-block m-0">
+                            <div className="input-block">
                                 <label>Data zwrotu</label>
-                            </div>
-                            <div className="input-block-wrapp sidebar-form">
-                                <div className="input-block me-2">
                                 <div className="group-img">
-                                    <input
-                                    type="text"
-                                    className="form-control datetimepicker"
-                                    placeholder="04/11/2023"
-                                    />
-                                </div>
-                                </div>
-                                <div className="input-block">
-                                <div className="group-img">
-                                    <input
-                                    type="text"
-                                    className="form-control timepicker"
-                                    placeholder="11:00 AM"
-                                    />
-                                </div>
+                                    <DataPickerTurnPoint></DataPickerTurnPoint>
                                 </div>
                             </div>
                             </li>
+                            {/*}
                             <li className="column-group-last">
                             <div className="input-block mb-0">
                                 <div className="search-btn">
+                                <Link to="#rentals-list">
                                 <button
                                     className="btn btn-primary check-available w-100"
                                     type="button"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#pages_edit"
                                 >
                                     {" "}
                                     Wybierz wypożyczalnie
                                 </button>
+                                </Link>
                                 </div>
                             </div>
                             </li>
+                            {*/}
                         </ul>
                         </form>
                     </div>
